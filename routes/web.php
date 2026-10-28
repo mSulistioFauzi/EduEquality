@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\C_AdminDashboard;
+use App\Http\Controllers\Admin\C_AdminDashboard;
+use App\Http\Controllers\Admin\C_AdminSubject;
 use App\Http\Controllers\C_AuthController;
 use App\Http\Controllers\C_StudentDashboard;
-use App\Http\Controllers\C_TutorDashboard;
+use App\Http\Controllers\Tutor\C_TutorDashboard;
+use App\Http\Controllers\Tutor\C_TutorProfile;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::redirect('/', '/login');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [C_AuthController::class, 'showLogin'])
@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
             Route::get('/dashboard', [C_AdminDashboard::class, 'index'])->name('dashboard');
+            Route::resource('subjects', C_AdminSubject::class)->except(['show']);
         });
 
     Route::prefix('student')->name('student.')->middleware('role:student')->group(function () {
@@ -49,5 +50,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('tutor')->name('tutor.')->middleware('role:tutor')->group(function () {
             Route::get('/dashboard', [C_TutorDashboard::class, 'index'])->name('dashboard');
+            Route::get('/profile', [C_TutorProfile::class, 'edit'])->name('profile.edit');
+            Route::put('/profile', [C_TutorProfile::class, 'update'])->name('profile.update');
         });
 });

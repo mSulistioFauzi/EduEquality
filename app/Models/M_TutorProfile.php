@@ -24,7 +24,9 @@ class M_TutorProfile extends Model
     {
         return $this->belongsToMany(
             M_Subject::class,
-            'tutor_subjects'
+            'tutor_subjects',
+            'tutor_profile_id',
+            'subject_id'
         )->withTimestamps();
     }
 }

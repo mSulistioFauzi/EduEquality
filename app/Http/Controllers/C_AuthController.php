@@ -24,7 +24,8 @@ class C_AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return $this->redirectByRole(Auth::user()->role);
+            return $this->redirectByRole(Auth::user()->role)
+            ->with('success', 'Login berhasil. Selamat datang kembali di EduEqual!');
         }
 
         return back()

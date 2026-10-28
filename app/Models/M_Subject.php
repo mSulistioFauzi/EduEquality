@@ -18,12 +18,14 @@ class M_Subject extends Model
     {
         return $this->belongsToMany(
             M_TutorProfile::class,
-            'tutor_subjects'
+            'tutor_subjects',
+            'subject_id',
+            'tutor_profile_id'
         )->withTimestamps();
     }
 
     public function helpRequests()
     {
-        return $this->hasMany(M_HelpRequest::class);
+        return $this->hasMany(M_HelpRequest::class, 'subject_id');
     }
 }
